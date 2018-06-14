@@ -36,21 +36,19 @@ public class DOMAnalyze {
     {
         ArrayList<String>  word = new ArrayList<String>();
         int m= 0 ,n = 0;
-        int count = 0;//解决括号嵌套的问题
+        int tag = 0;
         for(int i = 0;i<str.length() - 1; i++){
             if(str.charAt(i) == '['&& str.charAt(i+1) == '['){
-                if(count == 0){
                     m = i;
-                }
-                count++;
+                    tag = 1;
             }
             if(str.charAt(i) == ']' && str.charAt(i+1) ==']'){
-                count--;
-                if(count == 0){
-                    n = i;
-                    word.add(str.substring(m+2 , n));
+                n = i;
+                if (tag == 1) {
+                    word.add(str.substring(m + 2, n));
+                    tag = 0;
                 }
-            }
+                }
         }
         return word;
     }
@@ -255,7 +253,6 @@ public class DOMAnalyze {
         generatecsv1(slct,words);
         //生成对关系表格
         generatecsv2(slct,pagewords,words);
-
     }
 
 }
