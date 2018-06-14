@@ -116,11 +116,14 @@ public class DOMAnalyze {
                 for (int k = 0 ; k < pagewords.size(); k++)
                 {
                     t = (Map)pagewords.get(k);
-                    if (t.containsKey(slct.get(i)) && t.containsKey(slct.get(j)))
-                        count++;
-                    if (words.containsKey(slct.get(i)) && t.containsKey(slct.get(j)))
-                        count += (int)t.get(slct.get(j))-1;//注意这里应该-1，因为如果title为i的话，那么刚刚其实已经算过了一次（等于说刚才算的是存在与否，现在算的是次数）
-                }
+                    if (t.containsKey(slct.get(i)) && t.containsKey(slct.get(j)))//当前page两个词都出现了
+                        if (i == k)//slct的前10个词是pagetitle
+                            count += (int)t.get(slct.get(j));//i = k表示i是当前页面的title
+                        else if (j == k)
+                            count += (int)t.get(slct.get(i));//j是当前页面的title
+                        else
+                            count++;
+                    }
 
                 temp.add(count);
 
@@ -194,9 +197,9 @@ public class DOMAnalyze {
 
 
     public static void main(String[] args) throws Exception {
-        Map pagewords = new HashMap();//用来存储每一个paper的情况，value是另一个map
-        Map times ;//用来存储一个paper中words出现的情况
-        Map words = new HashMap();//存10个pagetitle
+        Map pagewords = new HashMap();//用来存储每一个paper的情况，value是形如{keyword,times}map
+        Map times ;//用来存储pagewords内部的map
+        Map words = new HashMap();//存10个pagetitle,value是形如{pagetitle, time}的map
 
         List<String> list;
         ArrayList slct = new ArrayList<>();
